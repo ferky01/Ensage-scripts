@@ -150,7 +150,43 @@ local function APL()
             return S.BattleShout:Cast()
         end
     end
-
+    
+    AoE = function()	
+        --Cast Whirlwind Icon Whirlwind for two stacks of its buff.	
+        if S.Whirlwind:IsReady() and Player:BuffStackP(S.WhirlwindBuff) < 2 and Cache.EnemiesCount[5] >= 2 then	
+            return S.Whirlwind:Cast()	
+        end	
+        	
+        --Cast Recklessness Icon Recklessness if able.	
+        if S.Recklessness:IsReady() then	
+            return S.Recklessness:Cast()	
+        end	
+        	
+        --Cast Siegebreaker Icon Siegebreaker to debuff multiple targets.	
+        if S.Siegebreaker:IsReady() and (Player:BuffP(S.Recklessness) or S.Recklessness:CooldownRemainsP() > 20) then	
+            return S.Siegebreaker:Cast()	
+        end	
+        	
+        --Cast Rampage Icon Rampage for Enrage Icon Enrage.	
+        if S.Rampage:IsReady() then	
+            return S.Rampage:Cast()	
+        end	
+        	
+        --Cast Bladestorm Icon Bladestorm or Dragon Roar Icon Dragon Roar as appropriate.	
+        if S.Bladestorm:IsReady() then	
+            return S.Bladestorm:Cast()	
+        end	
+        -- dragon_roar,if=buff.enrage.up&(debuff.siegebreaker.up|!talent.siegebreaker.enabled)	
+        if S.DragonRoar:IsReady() and Cache.EnemiesCount[5] >= 1 then	
+            return S.DragonRoar:Cast()	
+        end	
+        	
+        --Cast Whirlwind Icon Whirlwind to refresh its buff.	
+        if S.Whirlwind:IsReady() and Player:BuffRemainsP(S.WhirlwindBuff) < Player:GCD() * 2 and Cache.EnemiesCount[5] >= 2 then	
+            return S.Whirlwind:Cast()	
+        end	
+    end	
+    
     SingleTarget = function()
         -- siegebreaker,if=buff.recklessness.up|cooldown.recklessness.remains>20
         if S.Siegebreaker:IsReady() and (Player:BuffP(S.Recklessness) or S.Recklessness:CooldownRemainsP() > 20) then
